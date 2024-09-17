@@ -25,6 +25,7 @@ export class CategoryService {
         id: category.id || category._id,
         name: category.name,
         available: category.available,
+        user: category.user,
       };
     } catch (error) {
       throw CustomError.internalServer(`${error}`);
@@ -36,7 +37,7 @@ export class CategoryService {
     try {
       const [totalCategories, allCategories] = await Promise.all([
         CategoryModel.countDocuments(),
-        CategoryModel.find({})
+        CategoryModel.find()
           .skip((page - 1) * limit)
           .limit(limit),
       ]);

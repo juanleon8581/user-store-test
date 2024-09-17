@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { CreateCategoryDto, CustomError, PaginationDto } from "../../domain";
-import { CategoryService } from "../services";
+import { CustomError, PaginationDto, CreateProductDto } from "../../domain";
+import { ProductService } from "../services/product.service";
 
 export class ProductsController {
-  constructor() {} // TODO: private readonly productService: ProductService
+  constructor(private readonly productService: ProductService) {} // TODO: private readonly productService: ProductService
 
   private errorHandle = (error: unknown, res: Response) => {
     if (error instanceof CustomError)
@@ -14,15 +14,13 @@ export class ProductsController {
   };
 
   createProduct = (req: Request, res: Response) => {
-    res.json("Create Product");
-    // const { body } = req;
-    // const [error, createCategoryDto] = CreateCategoryDto.create(body);
-    // if (error) return res.status(400).json({ error });
+    const [error, createProductDto] = CreateProductDto.create(req.body);
+    if (error) return res.status(400).json({ error });
 
-    // this.categoryService
-    //   .createCategory(createCategoryDto!)
-    //   .then((data) => res.status(201).json(data))
-    //   .catch((error) => this.errorHandle(error, res));
+    this.productService
+      .createProduct(createProductDto!)
+      .then((data) => res.status(201).json(data))
+      .catch((error) => this.errorHandle(error, res));
   };
 
   getProducts = (req: Request, res: Response) => {
@@ -31,16 +29,14 @@ export class ProductsController {
     const [error, paginationDto] = PaginationDto.create(+page, +limit);
     if (error) return res.status(400).json({ error });
 
-    res.json(paginationDto);
-
-    // this.categoryService
-    //   .getAllCategories(paginationDto!)
-    //   .then((data) => res.json(data))
-    //   .catch((error) => this.errorHandle(error, res));
+    this.productService
+      .getAllProducrts(paginationDto!)
+      .then((data) => res.json(data))
+      .catch((error) => this.errorHandle(error, res));
   };
 
   getProduct = (req: Request, res: Response) => {
-    res.json("Get Category");
+    res.json("Get Product");
   };
 
   updateProduct = (req: Request, res: Response) => {

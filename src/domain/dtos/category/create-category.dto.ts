@@ -2,7 +2,7 @@ export class CreateCategoryDto {
   private constructor(
     public readonly name: string,
     public readonly available: boolean,
-    public readonly userId: string
+    public readonly user: string
   ) {}
 
   static create(obj: { [key: string]: any }): [string?, CreateCategoryDto?] {
